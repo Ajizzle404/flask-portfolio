@@ -1,0 +1,38 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adrian Tate | Portfolio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Hello, I'm Adrian 👋</h1>
+    <p>DevOps Engineer | Cloud | Docker | Kubernetes</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>About Me</h2>
+      <p>I’m passionate about DevOps, automation, and containerization. This portfolio site runs on Flask + Docker.</p>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+      <ul>
+        {% for project in projects %}
+          <li><strong>{{ project.name }}</strong> - {{ project.desc }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>Email: adriantate83@gmail.com</p>
+      <p>GitHub: <a href="https://github.com/Ajizzle404">Ajizzle404</a></p>
+      <p>DockerHub: <a href="https://hub.docker.com/u/ajizzle404">ajizzle404</a></p>
+    </section>
+  </main>
+</body>
+</html>
