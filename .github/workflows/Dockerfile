@@ -1,3 +1,10 @@
-FROM python:3.7-slim
-RUN pip install flask==1.0
-CMD ["python", "-c", "print('hi')"]
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+CMD ["node", "app/sum.js"]

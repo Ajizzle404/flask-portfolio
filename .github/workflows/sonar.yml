@@ -19,14 +19,23 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  scan:
-    if: github.event_name == 'pull_request'
+  trivy-scan:
+    name: Build & Scan Docker Image
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - run: docker build -t demo:${{ github.sha }} .
-      - uses: aquasecurity/trivy-action@0.28.0
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t gha-lab:${{ github.sha }} .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
         with:
-          image-ref: demo:${{ github.sha }}
-          severity: HIGH,CRITICAL
+          image-ref: gha-lab:${{ github.sha }}
+          format: table
           exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
