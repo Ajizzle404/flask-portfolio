@@ -1,4 +1,4 @@
-name: SonarQube Cloud
+name: SonarQube Cloud and Trivy
 on:
   pull_request:
     branches: [main]
@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0    # Sonar needs full git history
+          fetch-depth: 0     Sonar needs full git history
       - uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -18,3 +18,15 @@ jobs:
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  scan:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t demo:${{ github.sha }} .
+      - uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: demo:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'
