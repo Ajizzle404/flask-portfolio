@@ -1,20 +1,17 @@
-name: SonarQube Cloud and Trivy
+name: SonarQube Cloud
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
 jobs:
-  sonar:
+  scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0     Sonar needs full git history
+        with: { fetch-depth: 0 }   # Sonar needs full git history
       - uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - uses: SonarSource/sonarqube-quality-gate-action@v1
         timeout-minutes: 5
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}ls
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
